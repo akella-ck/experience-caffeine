@@ -68,7 +68,7 @@ public/
 
 ## Installation
 
-Requirements: Node.js 20.9 or newer and pnpm 11 or newer.
+Requirements: Node.js 22.13 or newer and pnpm 11 or newer. Node.js 24 LTS is recommended and used in CI.
 
 ```bash
 pnpm install
