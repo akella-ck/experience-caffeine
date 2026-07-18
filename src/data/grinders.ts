@@ -1,0 +1,315 @@
+import type { Grinder, GrinderSetting, VideoPlaceholder } from "../types";
+import { withBasePath } from "../config/site";
+
+const grinderVideo = (name: string): VideoPlaceholder => ({
+  title: `${name}: calibration and daily setup`,
+  duration: "05:20",
+  thumbnail: withBasePath("/window.svg"),
+  captionsAvailable: true,
+  description: `A replaceable instructional placeholder showing how to establish zero, choose a starting setting, and clean the ${name}.`,
+  chapters: [
+    { title: "Adjustment system", timestamp: "00:00" },
+    { title: "Finding zero", timestamp: "01:14" },
+    { title: "Brew ranges", timestamp: "02:31" },
+    { title: "Cleaning", timestamp: "04:12" },
+  ],
+});
+
+const settings = (
+  values: Record<GrinderSetting["brewMethodId"], Omit<GrinderSetting, "brewMethodId">>,
+): GrinderSetting[] =>
+  (Object.entries(values) as [GrinderSetting["brewMethodId"], Omit<GrinderSetting, "brewMethodId">][]).map(
+    ([brewMethodId, value]) => ({ brewMethodId, ...value }),
+  );
+
+export const grinders = [
+  {
+    id: "baratza-encore",
+    slug: "baratza-encore",
+    name: "Baratza Encore",
+    brand: "Baratza",
+    adjustmentType: "40-step collar adjustment",
+    description: "An approachable electric conical-burr grinder with clear numbered settings.",
+    overview:
+      "The Encore is a practical filter-coffee reference because its stepped collar is easy to record. Individual units may zero differently, so treat every number as a starting coordinate rather than a universal particle size.",
+    burrType: "40 mm stainless-steel conical burrs",
+    bestFor: ["v60", "aeropress", "french-press", "chemex", "cold-brew", "automatic-drip"],
+    zeroPointInstructions: [
+      "Unplug the grinder and remove the hopper and upper burr for cleaning.",
+      "Reinstall the upper burr with its red tab aligned to the red mark on the housing.",
+      "With the grinder empty and running, turn toward 1 only until the burr tone begins to change; do not force the collar.",
+      "Record the first audible contact point for your unit. Normal brewing settings must remain safely coarser.",
+    ],
+    settings: settings({
+      v60: { startingRange: "14–18", grindDescription: "medium-fine", adjustmentAdvice: "Start at 16. Move one click finer for a fast, sour drawdown or coarser for a slow, dry one." },
+      aeropress: { startingRange: "10–14", grindDescription: "medium-fine", adjustmentAdvice: "Start at 12 for a two-minute recipe; coarsen slightly when extending the steep." },
+      "french-press": { startingRange: "26–30", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 28. A weak cup can often tolerate one or two clicks finer." },
+      chemex: { startingRange: "20–24", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 22 and go coarser if a 500 g brew runs beyond five minutes." },
+      espresso: { startingRange: "4–8 (pressurized basket only)", grindDescription: "fine", adjustmentAdvice: "The standard Encore lacks fine control for consistent unpressurized espresso; make very small changes and use beverage weight." },
+      "moka-pot": { startingRange: "8–12", grindDescription: "medium-fine", adjustmentAdvice: "Start at 10. Coarsen if flow sputters or the cup tastes harsh." },
+      "cold-brew": { startingRange: "30–36", grindDescription: "coarse", adjustmentAdvice: "Start at 32. Move coarser if filtration is muddy or slow." },
+      "automatic-drip": { startingRange: "18–24", grindDescription: "medium", adjustmentAdvice: "Start near 20 for a small batch and coarsen slightly as batch size increases." },
+    }),
+    calibrationSteps: [
+      "Clean the burr chamber and confirm the upper burr is seated correctly.",
+      "Choose the middle of the suggested method range and brew a measured baseline.",
+      "Compare taste and drawdown, then move only one or two numbered steps.",
+      "Save the final setting with coffee, dose, and batch size in the journal.",
+    ],
+    cleaningSteps: [
+      "Unplug the grinder and empty the hopper.",
+      "Remove the hopper and lift out the upper burr by its tabs.",
+      "Brush loose grounds from both burrs and the chute; keep water away from the grinder body.",
+      "Reinstall the upper burr in the correct orientation before locking the hopper.",
+    ],
+    commonErrors: [
+      { title: "Upper burr installed backward", symptom: "Coffee grinds extremely coarse or inconsistently at normal settings.", correction: "Align the upper burr's colored tab with the housing mark before seating it." },
+      { title: "Adjusting finer while stopped", symptom: "Beans trapped between burrs make the collar feel jammed.", correction: "Run the grinder while making finer adjustments when beans are present." },
+      { title: "Treating setting 16 as universal", symptom: "A copied recipe misses its target time despite matching the number.", correction: "Calibrate by taste and drawdown for your grinder and coffee." },
+    ],
+    video: grinderVideo("Baratza Encore"),
+    recommendedRecipeIds: ["yirgacheffe-v60", "huila-aeropress", "guatemala-drip"],
+  },
+  {
+    id: "fellow-ode-gen-2",
+    slug: "fellow-ode-gen-2",
+    name: "Fellow Ode Gen 2",
+    brand: "Fellow",
+    adjustmentType: "Stepped 1–11 dial with micro-steps",
+    description: "A flat-burr electric grinder designed around filter coffee clarity.",
+    overview:
+      "The second-generation Ode offers broad filter coverage and low retention. Its dial notation uses major numbers plus intermediate ticks; references like 4.2 mean the second small tick after 4, not a decimal measurement.",
+    burrType: "64 mm flat stainless-steel Gen 2 burrs",
+    bestFor: ["v60", "aeropress", "french-press", "chemex", "cold-brew", "automatic-drip"],
+    zeroPointInstructions: [
+      "Empty the grinder and run it before moving toward the finest position.",
+      "Listen for the first light burr chirp; stop moving finer immediately.",
+      "If the dial marker is not at 1, follow the manufacturer's calibration procedure to reposition it.",
+      "Back away from chirp before grinding coffee. Do not use burr contact as a brewing setting.",
+    ],
+    settings: settings({
+      v60: { startingRange: "4.2–5.1", grindDescription: "medium-fine", adjustmentAdvice: "Begin at 4.2 for 250 g and move one tick at a time based on flavor and drawdown." },
+      aeropress: { startingRange: "3.2–4.1", grindDescription: "medium-fine", adjustmentAdvice: "Use the finer end for short steeps and the coarser end for longer immersion recipes." },
+      "french-press": { startingRange: "7.0–8.0", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 7.1; move finer if a four-minute steep tastes hollow." },
+      chemex: { startingRange: "6.0–7.0", grindDescription: "medium-coarse", adjustmentAdvice: "Start near 6.1 for 500 g and coarsen for larger batches or slow filters." },
+      espresso: { startingRange: "Not recommended", grindDescription: "fine", adjustmentAdvice: "Ode is not designed for espresso-fine grinding. Use an espresso-capable grinder." },
+      "moka-pot": { startingRange: "2.0–3.0 (coffee dependent)", grindDescription: "medium-fine", adjustmentAdvice: "Only use if the coffee flows freely; Ode is a filter grinder and may not suit every moka recipe." },
+      "cold-brew": { startingRange: "9.0–11.0", grindDescription: "coarse", adjustmentAdvice: "Start at 9 for concentrate and coarsen if paper filtration stalls." },
+      "automatic-drip": { startingRange: "5.0–7.0", grindDescription: "medium", adjustmentAdvice: "Start near 5.2 for 500 g and move coarser with larger batch depth." },
+    }),
+    calibrationSteps: [
+      "With an empty, running grinder, locate the first chirp without lingering at contact.",
+      "Reset the dial marker only when the grinder is unplugged and the procedure calls for it.",
+      "Brew at the midpoint of the method range using a fixed ratio and pouring pattern.",
+      "Move a single tick between brews and record the result.",
+    ],
+    cleaningSteps: [
+      "Unplug and remove the load bin and catch cup.",
+      "Open the front burr carrier according to the manufacturer instructions without changing calibration screws unnecessarily.",
+      "Brush the burr faces and knocker area; avoid water on burrs and electronics.",
+      "Reassemble, confirm free rotation, and purge a small dose of coffee.",
+    ],
+    commonErrors: [
+      { title: "Reading ticks as decimals", symptom: "Settings are copied inconsistently between recipes.", correction: "Record the main number and tick position using one notation system." },
+      { title: "Attempting espresso", symptom: "The grinder cannot provide the required fine control or range.", correction: "Use a grinder designed for espresso." },
+      { title: "Ignoring batch size", symptom: "Large Chemex or drip batches stall at a small-batch setting.", correction: "Move coarser as the coffee bed becomes deeper." },
+    ],
+    video: grinderVideo("Fellow Ode Gen 2"),
+    recommendedRecipeIds: ["yirgacheffe-v60", "nyeri-chemex", "guatemala-drip"],
+  },
+  {
+    id: "timemore-c2",
+    slug: "timemore-c2",
+    name: "Timemore C2",
+    brand: "Timemore",
+    adjustmentType: "Internal stepped click dial",
+    description: "A compact hand grinder with numbered-by-count internal adjustments.",
+    overview:
+      "The C2 is adjusted from a closed zero point by counting clicks coarser. Always record full rotations and clicks consistently, and never grind at true zero where the burrs touch.",
+    burrType: "38 mm stainless-steel conical burrs",
+    bestFor: ["v60", "aeropress", "french-press", "chemex", "moka-pot", "automatic-drip"],
+    zeroPointInstructions: [
+      "Empty the grinder and hold it upright with the handle removed.",
+      "Turn the adjustment dial clockwise until it stops naturally; do not tighten with force.",
+      "Treat that closed position as zero, then count audible clicks counterclockwise to the brew setting.",
+      "Recount from zero whenever repeatability matters because the dial has no external index.",
+    ],
+    settings: settings({
+      v60: { startingRange: "14–17 clicks", grindDescription: "medium-fine", adjustmentAdvice: "Start at 15 clicks. Use one-click changes and let the burrs cool between large batches." },
+      aeropress: { startingRange: "11–14 clicks", grindDescription: "medium-fine", adjustmentAdvice: "Start at 12 for a two-minute steep; coarsen for longer contact time." },
+      "french-press": { startingRange: "20–24 clicks", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 22. Try one click finer if the cup is hollow at four minutes." },
+      chemex: { startingRange: "18–22 clicks", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 20 for 500 g and move coarser if the filter stalls." },
+      espresso: { startingRange: "7–9 clicks (limited control)", grindDescription: "fine", adjustmentAdvice: "The click spacing can be too broad for dialing espresso; pressurized baskets are more forgiving." },
+      "moka-pot": { startingRange: "9–12 clicks", grindDescription: "medium-fine", adjustmentAdvice: "Start at 10 and move coarser if flow becomes aggressive or bitter." },
+      "cold-brew": { startingRange: "24–30 clicks", grindDescription: "coarse", adjustmentAdvice: "Start at 26; move coarser if filtration produces excess sediment." },
+      "automatic-drip": { startingRange: "16–20 clicks", grindDescription: "medium", adjustmentAdvice: "Start at 18 and coarsen one click for larger batches." },
+    }),
+    calibrationSteps: [
+      "Return the empty grinder gently to zero.",
+      "Count outward to the midpoint of the selected range.",
+      "Brew once with fixed dose, water, and technique.",
+      "Adjust by one click and write the click count in the journal.",
+    ],
+    cleaningSteps: [
+      "Unscrew and remove the catch cup.",
+      "Hold the inner burr, remove the adjustment dial, and keep washers in their original order.",
+      "Brush the burrs, axle, and chamber with a dry grinder brush.",
+      "Reassemble in the same washer order, close gently to zero, and confirm the click mechanism works.",
+    ],
+    commonErrors: [
+      { title: "Over-tightening zero", symptom: "Burr edges rub or the adjustment dial binds.", correction: "Stop at first natural closure; never torque the dial." },
+      { title: "Losing count", symptom: "A saved recipe cannot be reproduced.", correction: "Return to zero and count again before important brews." },
+      { title: "Incorrect washer order", symptom: "The handle or burr spins poorly after cleaning.", correction: "Reassemble every washer and spring in its original sequence." },
+    ],
+    video: grinderVideo("Timemore C2"),
+    recommendedRecipeIds: ["yirgacheffe-v60", "huila-aeropress", "guatemala-drip"],
+  },
+  {
+    id: "comandante-c40",
+    slug: "comandante-c40",
+    name: "Comandante C40",
+    brand: "Comandante",
+    adjustmentType: "Internal stepped click dial",
+    description: "A precise hand grinder with a widely shared click-based recipe language.",
+    overview:
+      "The C40's click count is repeatable when users agree on zero. Burr wear, coffee density, and optional Red Clix hardware still change the meaning of a copied number, so taste remains the final calibration tool.",
+    burrType: "Nitro Blade stainless-steel conical burrs",
+    bestFor: ["v60", "aeropress", "french-press", "chemex", "espresso", "moka-pot", "automatic-drip"],
+    zeroPointInstructions: [
+      "Empty the grinder, remove the catch jar, and hold the handle in place.",
+      "Turn the dial clockwise until the handle no longer falls freely under its own weight.",
+      "Use this burr-touch position as click zero without tightening further.",
+      "Count counterclockwise clicks to the desired setting; standard and Red Clix counts are not interchangeable.",
+    ],
+    settings: settings({
+      v60: { startingRange: "22–26 clicks", grindDescription: "medium-fine", adjustmentAdvice: "Start at 24 with standard axle hardware and change one or two clicks after tasting." },
+      aeropress: { startingRange: "16–22 clicks", grindDescription: "medium-fine", adjustmentAdvice: "Use the finer end for quick recipes and coarser settings for longer steeps." },
+      "french-press": { startingRange: "28–34 clicks", grindDescription: "medium-coarse", adjustmentAdvice: "Start near 30; a slightly finer-than-traditional press grind often improves sweetness." },
+      chemex: { startingRange: "26–30 clicks", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 28 for 500 g and move coarser as dose and bed depth increase." },
+      espresso: { startingRange: "7–12 clicks (standard axle)", grindDescription: "fine", adjustmentAdvice: "Standard clicks may be too broad for precise dial-in; Red Clix changes the scale and must be documented separately." },
+      "moka-pot": { startingRange: "13–18 clicks", grindDescription: "medium-fine", adjustmentAdvice: "Start at 15, keeping the basket loose and heat moderate." },
+      "cold-brew": { startingRange: "35–40 clicks", grindDescription: "coarse", adjustmentAdvice: "Start around 36 for concentrate and coarsen if filtering is muddy." },
+      "automatic-drip": { startingRange: "24–30 clicks", grindDescription: "medium", adjustmentAdvice: "Start at 26 for 500 g and move coarser for a deep commercial-style basket." },
+    }),
+    calibrationSteps: [
+      "Confirm whether the grinder uses the standard axle or Red Clix before copying a recipe.",
+      "Find zero using handle freedom rather than tightening burrs together.",
+      "Brew at the range midpoint and log the complete hardware and click count.",
+      "Move one or two standard clicks per brew while holding technique constant.",
+    ],
+    cleaningSteps: [
+      "Remove the dial, lower burr, spring, and washers while noting their order.",
+      "Brush the burr and body; use only cleaning products permitted by the manufacturer.",
+      "Inspect the axle and bearings for trapped particles.",
+      "Reassemble in order, check free handle movement, and recount zero.",
+    ],
+    commonErrors: [
+      { title: "Mixing Red Clix and standard counts", symptom: "A copied recipe is dramatically finer or coarser than intended.", correction: "Record the axle system with every setting." },
+      { title: "Tightening past zero", symptom: "Burr surfaces are held under unnecessary pressure.", correction: "Use the first point where the handle stops falling freely." },
+      { title: "Changing clicks without context", symptom: "The same setting behaves differently across dense light and soluble dark roasts.", correction: "Save coffee, roast, dose, and brew time with the click count." },
+    ],
+    video: grinderVideo("Comandante C40"),
+    recommendedRecipeIds: ["yirgacheffe-v60", "nyeri-chemex", "cerrado-espresso"],
+  },
+  {
+    id: "breville-smart-grinder-pro",
+    slug: "breville-smart-grinder-pro",
+    name: "Breville Smart Grinder Pro",
+    brand: "Breville",
+    adjustmentType: "60-step digital dial plus upper-burr range",
+    description: "A timed-dose electric conical grinder spanning espresso and filter ranges.",
+    overview:
+      "The Smart Grinder Pro combines a front grind-size number with an internal upper-burr adjustment. Two grinders showing the same display number can differ if their upper burrs are set differently, so both references belong in a complete recipe.",
+    burrType: "Stainless-steel conical burrs",
+    bestFor: ["espresso", "moka-pot", "aeropress", "v60", "automatic-drip"],
+    zeroPointInstructions: [
+      "Do not run the burrs at contact as a routine calibration method.",
+      "Record the factory or current upper-burr number before changing it.",
+      "Use the front dial for daily adjustment and move the upper burr only when the whole usable range is misplaced.",
+      "After an upper-burr change, purge a small dose and create a new set of recipe references.",
+    ],
+    settings: settings({
+      v60: { startingRange: "38–44", grindDescription: "medium-fine", adjustmentAdvice: "Start near 40 and make two-step changes until drawdown is close, then use single steps." },
+      aeropress: { startingRange: "30–38", grindDescription: "medium-fine", adjustmentAdvice: "Start near 34 for a two-minute steep; coarsen when extending contact time." },
+      "french-press": { startingRange: "50–56", grindDescription: "medium-coarse", adjustmentAdvice: "Start at 52. If the cup is hollow, try a few steps finer rather than an extremely coarse grind." },
+      chemex: { startingRange: "44–50", grindDescription: "medium-coarse", adjustmentAdvice: "Start around 46 for 500 g and coarsen for larger batches." },
+      espresso: { startingRange: "8–14", grindDescription: "fine", adjustmentAdvice: "Start near 12 at the factory upper-burr position, then adjust one step while holding dose and yield fixed." },
+      "moka-pot": { startingRange: "20–28", grindDescription: "medium-fine", adjustmentAdvice: "Start around 24 and coarsen if the pot sputters or tastes harsh." },
+      "cold-brew": { startingRange: "56–60", grindDescription: "coarse", adjustmentAdvice: "Use the coarse end; if still too fine, avoid changing the upper burr solely for one occasional brew." },
+      "automatic-drip": { startingRange: "42–50", grindDescription: "medium", adjustmentAdvice: "Start near 44 for a small batch and coarsen as batch size grows." },
+    }),
+    calibrationSteps: [
+      "Write down the upper-burr number and front display setting.",
+      "Choose a setting near the middle of the method range and grind a weighed dose.",
+      "Brew to a fixed yield and adjust only the front dial first.",
+      "Change the upper burr only if the useful range runs out, then recalibrate every recipe.",
+    ],
+    cleaningSteps: [
+      "Unplug the grinder, empty the hopper, and run briefly to clear retained beans.",
+      "Remove the hopper and upper burr following the lock arrows.",
+      "Brush the burrs and chute; clear the impeller area without introducing water.",
+      "Reinstall the upper burr at the recorded internal number and purge a small dose.",
+    ],
+    commonErrors: [
+      { title: "Omitting the upper-burr number", symptom: "Another user's display setting does not transfer.", correction: "Document both internal and external adjustments." },
+      { title: "Dialing espresso by time alone", symptom: "Shot strength changes while the clock appears correct.", correction: "Keep dose and beverage yield fixed, then use time and taste together." },
+      { title: "Relying on timed dose", symptom: "Dose shifts as beans and grind size change.", correction: "Weigh the output when repeatability matters." },
+    ],
+    video: grinderVideo("Breville Smart Grinder Pro"),
+    recommendedRecipeIds: ["cerrado-espresso", "huila-aeropress", "guatemala-drip"],
+  },
+  {
+    id: "other",
+    slug: "other",
+    name: "Other grinder",
+    brand: "User supplied",
+    adjustmentType: "Varies by model",
+    description: "A method-level grind description for grinders not yet in the catalog.",
+    overview:
+      "Use particle-size descriptions as a visual starting point, then record the setting language used by your grinder. Calibration, burr geometry, wear, and coffee all affect the final position.",
+    burrType: "Model dependent",
+    bestFor: ["v60", "aeropress", "french-press", "chemex", "espresso", "moka-pot", "cold-brew", "automatic-drip"],
+    zeroPointInstructions: [
+      "Read the manufacturer's guide before approaching the finest setting.",
+      "Determine whether settings are counted from burr touch, a printed zero, or another reference.",
+      "Never force burrs together and never run at burr contact.",
+      "Record the grinder model and its exact setting notation with each recipe.",
+    ],
+    settings: settings({
+      v60: { startingRange: "Medium-fine reference", grindDescription: "medium-fine", adjustmentAdvice: "Aim for a 2:45–3:15 drawdown, then adjust one small step by taste." },
+      aeropress: { startingRange: "Medium-fine reference", grindDescription: "medium-fine", adjustmentAdvice: "Use a slightly finer grind for short steeps and coarser for long steeps." },
+      "french-press": { startingRange: "Medium-coarse reference", grindDescription: "medium-coarse", adjustmentAdvice: "Avoid extremely coarse particles; move finer if the cup is hollow." },
+      chemex: { startingRange: "Medium-coarse reference", grindDescription: "medium-coarse", adjustmentAdvice: "Coarsen for larger doses or when the thick filter stalls." },
+      espresso: { startingRange: "Fine espresso reference", grindDescription: "fine", adjustmentAdvice: "Adjust in the smallest available increments with fixed dose and yield." },
+      "moka-pot": { startingRange: "Medium-fine reference", grindDescription: "medium-fine", adjustmentAdvice: "Use a grind coarser than espresso and never tamp the basket." },
+      "cold-brew": { startingRange: "Coarse reference", grindDescription: "coarse", adjustmentAdvice: "Coarsen if filtration is muddy or slow." },
+      "automatic-drip": { startingRange: "Medium reference", grindDescription: "medium", adjustmentAdvice: "Coarsen as batch size and coffee-bed depth increase." },
+    }),
+    calibrationSteps: [
+      "Choose the visual grind reference for the brewing method.",
+      "Brew with a measured ratio and record total time.",
+      "Change one small grinder increment based on taste.",
+      "Save the grinder model, setting, and result in the journal.",
+    ],
+    cleaningSteps: [
+      "Follow the manufacturer's power-off and disassembly instructions.",
+      "Use a dry brush unless the manual explicitly permits another method.",
+      "Reassemble adjustment parts in their original orientation.",
+      "Purge a small dose after cleaning and confirm calibration.",
+    ],
+    commonErrors: [
+      { title: "Using only a vague label", symptom: "The recipe cannot be repeated on the same grinder.", correction: "Pair the visual description with your grinder's exact setting." },
+      { title: "Copying another model's number", symptom: "Particle size is far from the intended range.", correction: "Numbers are model-specific; calibrate from a visual reference and taste." },
+    ],
+    video: grinderVideo("Your grinder"),
+    recommendedRecipeIds: ["yirgacheffe-v60", "huila-aeropress"],
+  },
+] satisfies Grinder[];
+
+export const grinderById = Object.fromEntries(
+  grinders.map((grinder) => [grinder.id, grinder]),
+) as Record<(typeof grinders)[number]["id"], (typeof grinders)[number]>;
+
+export const grinderSettings = grinders.flatMap((grinder) =>
+  grinder.settings.map((setting) => ({ grinderId: grinder.id, ...setting })),
+);
